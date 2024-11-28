@@ -1,0 +1,87 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: example
+  namespace: default
+  selfLink: /api/v1/namespaces/default/pods/example
+  uid: 5cc30063-0265780783bc
+  resourceVersion: '165032'
+  creationTimestamp: '2019-02-13T20:31:37Z'
+  labels:
+    app: hello-openshift 
+  annotations:
+    openshift.io/scc: anyuid
+spec:
+  restartPolicy: Always 
+  serviceAccountName: default
+  imagePullSecrets:
+    - name: default-dockercfg-5zrhb
+  priority: 0
+  schedulerName: default-scheduler
+  terminationGracePeriodSeconds: 30
+  nodeName: ip-10-0-140-16.us-east-2.compute.internal
+  securityContext: 
+    seLinuxOptions:
+      level: 's0:c11,c10'
+  containers: 
+    - resources: {}
+      terminationMessagePath: /dev/termination-log
+      name: hello-openshift
+      securityContext:
+        capabilities:
+          drop:
+            - MKNOD
+        procMount: Default
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      imagePullPolicy: Always
+      volumeMounts: 
+        - name: default-token-wbqsl
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount 
+      terminationMessagePolicy: File
+      image: registry.redhat.io/openshift4/ose-ogging-eventrouter:v4.3 
+  serviceAccount: default 
+  volumes: 
+    - name: default-token-wbqsl
+      secret:
+        secretName: default-token-wbqsl
+        defaultMode: 420
+  dnsPolicy: ClusterFirst
+status:
+  phase: Pending
+  conditions:
+    - type: Initialized
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2019-02-13T20:31:37Z'
+    - type: Ready
+      status: 'False'
+      lastProbeTime: null
+      lastTransitionTime: '2019-02-13T20:31:37Z'
+      reason: ContainersNotReady
+      message: 'containers with unready status: [hello-openshift]'
+    - type: ContainersReady
+      status: 'False'
+      lastProbeTime: null
+      lastTransitionTime: '2019-02-13T20:31:37Z'
+      reason: ContainersNotReady
+      message: 'containers with unready status: [hello-openshift]'
+    - type: PodScheduled
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2019-02-13T20:31:37Z'
+  hostIP: 10.0.140.16
+  startTime: '2019-02-13T20:31:37Z'
+  containerStatuses:
+    - name: hello-openshift
+      state:
+        waiting:
+          reason: ContainerCreating
+      lastState: {}
+      ready: false
+      restartCount: 0
+      image: openshift/hello-openshift
+      imageID: ''
+  qosClass: BestEffort
